@@ -1,5 +1,5 @@
 # BS_TIB
-Aufgabe1:
+<h1>Aufgabe 1:</h1>
 Kenngrößen, wie z.B. die Ausfallrate, können über statistische Methoden ermittelt werden. Dabei 
 werden zum Beispiel die Ausfälle von Geräten auf dem Feld beobachtet und protokolliert. Bei einer 
 hohen Anzahl von Geräten können so mit hoher Genauigkeit die Ausfallrate, bzw. die Zuverlässig-
@@ -12,7 +12,7 @@ kraft, die in die statistische Bewertung einfließen müssen. Parameter können 
 Likelihood-Methode  (MLE)  bestimmt  werden,  die  Zuverlässigkeitsfunktion  durch  den  Kaplan-
 Maier-Schätzer.
 
-Aufgabe2:
+<h1>Aufgabe 2:</h1>
 Der Fehlerbaum ist ein Werkzeug zur logischen Verknüpfung von Komponenten und Teilsystemen. 
 Unteranderem will man die Ausfallswahrscheinlichkeit ermitteln, in Abhängigkeit der Ausfallrate. 
 Der Fehlerbaum besteht aus einer Menge von Verknüpfungselementen. Bei dieser Aufgabe soll der 
@@ -20,7 +20,7 @@ Standardeingang, die Nicht-Verknüpfung, die Und-Verknüpfung und die Oder-Verkn
 handelt werden.
 
 
-Aufgabe3:
+<h1>Aufgabe 3:</h1>
 Ein Regelungssystem für einen chemischen Prozess mit einfacher Eingangs- und einfacher Aus-
 gangskomponente wird als 1oo2 Architektur entwickelt, Bild 1. Die Rechnerkomponente ist eine 
 SPS. Diese ist redundant ausgelegt. Es existiert ein Diagnosesystem, das Ausfälle beim Eingang, 
