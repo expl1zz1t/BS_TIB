@@ -36,23 +36,23 @@ class MARKOV:
         n = len(self.nodes)
         P = np.zeros((n, n))
         for t in self.transitions:
-            print((t.source.num,t.destination.num))
             i = t.source.num
             j = t.destination.num
             P[i, j] = t.rate
         for i in range(n):
             P[i, i] = 1 - np.sum(P[i])
         self.transition_matrix = P
+        np.set_printoptions(precision=3)
         print(P)
         return P
 
-    def probability(self, hours):
+    def probability(self, hours, state):
         self.build_transition_matrix()
-        state = np.zeros(len(self.nodes))
-        state[0] = 1  # Anfangszustand ist S1 
+        prob_state = np.zeros(len(self.nodes))
+        prob_state[0] = 1
         for _ in range(hours):
-            state = np.dot(state, self.transition_matrix)
-        return state
+            prob_state = np.dot(prob_state, self.transition_matrix)
+        return prob_state[state-1]
     
     def plot(self):
         self.dot = gv.Digraph(self.name, format="png")
@@ -75,6 +75,8 @@ B_S2 = STATE('S2',1)
 B.state(B_S1)
 B.state(B_S2)
 B.transition(TRANSITION(B_S1, B_S2, 'l12', 1000))
+prob_days = B.probability(1 * 24, 1)
+print(f"Verfügbarkeit nach 1 Tagen: {prob_days:.6f}\n")
 B.plot()
 
 #Aufgabe 3
@@ -87,7 +89,7 @@ S5 = STATE('S5\nDD\nAusgang',4)
 S6 = STATE('S6\nSicher',5)
 
 #Berechnung von lamda und mü
-lam = 3000 / 1e9
+lam = 3000 / 10e9
 mu  = 1 / 8
 
 print(lam)
@@ -115,13 +117,14 @@ M.transition(TRANSITION(S4, S6, 'μ46', mu))
 M.transition(TRANSITION(S5, S6, 'μ56', mu))
 
 # Simulation
-prob_40_days = M.probability(40 * 24)
-prob_6_months = M.probability(6 * 30 * 24)
-prob_12_years = M.probability(12 * 365 * 24)
+prob_days = M.probability(40 * 24, 1)
+print(f"Verfügbarkeit nach 40 Tagen: {prob_days:.6f}\n")
 
-print(f"Verfügbarkeit nach 40 Tagen: {prob_40_days[0]:.6f}")
-print(f"Verfügbarkeit nach 6 Monaten: {prob_6_months[0]:.6f}")
-print(f"Verfügbarkeit nach 12 Jahren: {prob_12_years[0]:.6f}")
+prob_days = M.probability(6 * 30 * 24, 1)
+print(f"Verfügbarkeit nach 6 Monaten: {prob_days:.6f}\n")
 
-print("Create Markov Graph")
+prob_days = M.probability(12 * 365 * 24, 1)
+print(f"Verfügbarkeit nach 12 Jahren: {prob_days:.6f}\n")
+
+print("Plot Markov Graph ... ")
 M.plot()
