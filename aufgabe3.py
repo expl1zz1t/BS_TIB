@@ -115,6 +115,7 @@ M.transition(TRANSITION(S3, S5, 'λ35', lam))
 M.transition(TRANSITION(S3, S6, 'μ26', mu))
 M.transition(TRANSITION(S4, S6, 'μ46', mu))
 M.transition(TRANSITION(S5, S6, 'μ56', mu))
+M.transition(TRANSITION(S6, S1, 'μ61', mu))
 
 # Simulation
 prob_days = M.probability(40 * 24, 1)
