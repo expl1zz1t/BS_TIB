@@ -36,33 +36,34 @@ class MARKOV:
         n = len(self.nodes)
         P = np.zeros((n, n))
         for t in self.transitions:
+            print((t.source.num,t.destination.num))
             i = t.source.num
             j = t.destination.num
             P[i, j] = t.rate
         for i in range(n):
             P[i, i] = 1 - np.sum(P[i])
         self.transition_matrix = P
-
-    def simulate(self, hours):
-        state = np.zeros(len(self.nodes))
-        state[0] = 1  # Anfangszustand ist S0
-        for _ in range(hours):
-            state = np.dot(state, self.transition_matrix)
-        return state
+        print(P)
+        return P
 
     def probability(self, hours):
         self.build_transition_matrix()
-        result = self.simulate(hours)
-        return result
+        state = np.zeros(len(self.nodes))
+        state[0] = 1  # Anfangszustand ist S1 
+        for _ in range(hours):
+            state = np.dot(state, self.transition_matrix)
+        return state
     
     def plot(self):
         self.dot = gv.Digraph(self.name, format="png")
+        # Set the graph to left-to-right layout
+        self.dot.attr(rankdir='LR')
                
         for node in self.nodes:
-            self.dot.node(node.name)
+            self.dot.node(node.name, shape="circle")
                 
         for node in self.transitions:
-            self.dot.edge(node.source.name, node.destination.name)
+            self.dot.edge(node.source.name, node.destination.name, label=node.name)
         
         return self.dot.render()    
      
@@ -78,15 +79,18 @@ B.plot()
 
 #Aufgabe 3
 M = MARKOV("Markov Graph")
-S1 = STATE('S1 Normal',1)
-S2 = STATE('S2 Eine SPS',2)
-S3 = STATE('S3 Beide SPS',3)
-S4 = STATE('S4 Wartung',4)
-S5 = STATE('S5 Ausgang',5)
-S6 = STATE('S6 Eingang',6)
+S1 = STATE('S1\nNormal',0)
+S2 = STATE('S2\nDD\nEine SPS',1)
+S3 = STATE('S3\nDD\nBeide SPS',2)
+S4 = STATE('S4\nDD\nEingang',3)
+S5 = STATE('S5\nDD\nAusgang',4)
+S6 = STATE('S6\nSicher',5)
 
-lam = 1 / 3000
+#Berechnung von lamda und mü
+lam = 3000 / 1e9
 mu  = 1 / 8
+
+print(lam)
 
 M.state(S1)
 M.state(S2)
@@ -95,16 +99,20 @@ M.state(S4)
 M.state(S5)
 M.state(S6)
 
-M.transition(TRANSITION(S1, S2, 'λ12', lam))
+M.transition(TRANSITION(S1, S2, '2λ12', 2*lam))
 M.transition(TRANSITION(S1, S3, 'λ13', lam))
+M.transition(TRANSITION(S1, S4, 'λ14', lam))
+M.transition(TRANSITION(S1, S5, 'λ15', lam))
+M.transition(TRANSITION(S1, S6, '2λ16', 2*lam))
+M.transition(TRANSITION(S2, S3, 'λ23', lam))
+M.transition(TRANSITION(S2, S4, 'λ24', lam))
 M.transition(TRANSITION(S2, S5, 'λ25', lam))
+M.transition(TRANSITION(S2, S6, 'μ26', mu))
+M.transition(TRANSITION(S3, S4, 'λ34', lam))
 M.transition(TRANSITION(S3, S5, 'λ35', lam))
-M.transition(TRANSITION(S2, S1, 'μ21', mu))
-M.transition(TRANSITION(S3, S1, 'μ31', mu))
-M.transition(TRANSITION(S5, S4, 'μ54', mu))
-M.transition(TRANSITION(S4, S1, 'μ41', mu))
-M.transition(TRANSITION(S4, S2, 'μ42', mu))
-M.transition(TRANSITION(S4, S3, 'μ43', mu))
+M.transition(TRANSITION(S3, S6, 'μ26', mu))
+M.transition(TRANSITION(S4, S6, 'μ46', mu))
+M.transition(TRANSITION(S5, S6, 'μ56', mu))
 
 # Simulation
 prob_40_days = M.probability(40 * 24)
